@@ -1,17 +1,22 @@
 import time
 from plyer import notification
+from tqdm import tqdm
 
-def pomodoro_timer(work_minutes=0.1, break_minutes=0.1, cycles=2):
+def countdown(minutes):
+    for _ in tqdm(range(minutes * 60)):  # Прогресс-бар на minutes * 60 секунд
+        time.sleep(1)  # Ждем 1 секунду
+
+def pomodoro_timer(work_minutes=1, break_minutes=1, cycles=2):
     for cycle in range(1, cycles + 1):
         print(f"Цикл {cycle}: Начинаем работу!")
-        time.sleep(work_minutes * 60)
+        countdown(work_minutes)  # Заменяем time.sleep на countdown
         notification.notify(
             title="Пора отдохнуть!",
             message=f"Цикл {cycle} завершен. Отдохните {break_minutes} минут.",
             timeout=10
         )
         print(f"Цикл {cycle}: Пора отдохнуть!")
-        time.sleep(break_minutes * 60)
+        countdown(break_minutes)  # Заменяем time.sleep на countdown
         notification.notify(
             title="Время работать!",
             message="Отдых окончен. Время вернуться к работе.",
