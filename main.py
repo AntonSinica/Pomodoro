@@ -10,25 +10,34 @@ def countdown(seconds):
         time.sleep(1)
     print()  # Переходим на новую строку после завершения
 
-def pomodoro_timer(work_minutes=0.1, break_minutes=0.1, cycles=2):
+def work_timer(work_minutes, cycle):
+    print(f"Цикл {cycle}: Начинаем работу!")
+    countdown(int(work_minutes * 60))
+    notification.notify(
+        title="Пора отдохнуть!",
+        message=f"Цикл {cycle} завершен. Отдохните.",
+        timeout=10
+    )
+
+def break_timer(break_minutes, cycle):
+    print(f"Цикл {cycle}: Пора отдохнуть!")
+    countdown(int(break_minutes * 60))
+    notification.notify(
+        title="Время работать!",
+        message="Отдых окончен. Время вернуться к работе.",
+        timeout=10
+    )
+
+def pomodoro_timer(work_minutes=0.05, break_minutes=0.05, cycles=2):
     for cycle in range(1, cycles + 1):
-        print(f"\nЦикл {cycle}: Начинаем работу!")
-        countdown(int(work_minutes * 60))
-        notification.notify(
-            title="Пора отдохнуть!",
-            message=f"Цикл {cycle} завершен. Отдохните {break_minutes} минут.",
-            timeout=10
-        )
+        work_timer(work_minutes, cycle)
+        print()
         if cycle == cycles:
             continue
-        print(f"\nЦикл {cycle}: Пора отдохнуть!")
-        countdown(int(break_minutes * 60))
-        notification.notify(
-            title="Время работать!",
-            message="Отдых окончен. Время вернуться к работе.",
-            timeout=10
-        )
-    print("\nВсе циклы завершены!")
+        break_timer(break_minutes, cycle)
+        print()
+
+    print("Все циклы завершены!")
 
 if __name__ == "__main__":
     pomodoro_timer()
